@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const mySqlConfig = require("../config/database");
 
 const sequelize = new Sequelize({
@@ -31,7 +31,6 @@ const DetailTransaksi = require("../models/detailTransaksi")(sequelize);
 const MetodePembayaran = require("../models/metodePembayaran")(sequelize);
 const BuktiPembayaran = require("../models/buktiPembayaran")(sequelize);
 const StatusTransaksi = require("../models/statusTransaksi")(sequelize);
-const StatusPembayaran = require("../models/statusPembayaran")(sequelize);
 const MutasiStok = require("../models/mutasiStok")(sequelize);
 const TipeMutasi = require("../models/tipeMutasi")(sequelize);
 
