@@ -360,6 +360,8 @@ class AuthService extends Service {
 
   static resendVerificationToken = async (userId) => {
     try {
+      const userId = req.user;
+
       const findUser = await User.findByPk(userId);
 
       if (findUser.is_verified) {
