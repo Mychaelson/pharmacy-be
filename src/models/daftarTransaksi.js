@@ -15,6 +15,10 @@ const DaftarTransaksi = (sequelize) => {
     nomor_resep: {
       type: DataTypes.STRING,
     },
+    productAdded: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 };
 

@@ -8,6 +8,8 @@ const {
   StokStatus,
   MutasiStok,
   PurchaseOrder,
+  DetailTransaksi,
+  DaftarTransaksi,
 } = require("../../lib/sequelize");
 const Service = require("../service");
 
@@ -210,6 +212,13 @@ class AdminService extends Service {
         },
       });
 
+      if (!findProducts) {
+        return this.handleError({
+          message: `Can't find Product with ID: ${id}`,
+          statusCode: 404,
+        });
+      }
+
       const editProdukImages = await Produk.update(
         {
           produk_image_url: filename,
@@ -221,12 +230,6 @@ class AdminService extends Service {
         }
       );
 
-      if (!findProducts) {
-        return this.handleError({
-          message: `Can't find Product with ID: ${id}`,
-          statusCode: 404,
-        });
-      }
       return this.handleSuccess({
         message: "Product Images Edited!",
         statusCode: 201,
@@ -443,6 +446,49 @@ class AdminService extends Service {
       console.log(err);
       return this.handleError({
         message: "Can't reach product stock server",
+        statusCode: 500,
+      });
+    }
+  };
+
+  static addCustomOrder = async (body) => {
+    try {
+      const products = body.map((val) => {
+        return {
+          price_when_sold: val.price,
+          quantity: val.quantity,
+          transactionListId: val.transactionListId,
+          productId: val.productId,
+        };
+      });
+      const addProduct = await DetailTransaksi.bulkCreate(products, {
+        individualHooks: true,
+      });
+
+      await DaftarTransaksi.update(
+        {
+          total_price: body[0].total_price,
+          productAdded: true,
+          nomor_resep: body[0].nomor_resep,
+        },
+        {
+          where: {
+            id: body[0].transactionListId,
+          },
+        }
+      );
+
+      // TODO: update status pembayaran
+
+      return this.handleSuccess({
+        message: "Added Products Success!",
+        statusCode: 201,
+        data: addProduct,
+      });
+    } catch (err) {
+      console.log(err);
+      return this.handleError({
+        message: "Can't reach custom product server!",
         statusCode: 500,
       });
     }

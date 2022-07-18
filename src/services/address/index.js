@@ -99,6 +99,12 @@ class AddressService extends Service {
           userId,
         },
       });
+      if (!findAddress) {
+        return this.handleError({
+          message: "No addresses found, please create one",
+          statusCode: 500,
+        });
+      }
       return this.handleSuccess({
         message: "Addresses found",
         statusCode: 200,

@@ -15,5 +15,6 @@ router.delete(
   authorizedLoginUser,
   cartController.deleteCart
 );
+router.post("/get-cart-id", cartController.getCartById);
 
 module.exports = router;

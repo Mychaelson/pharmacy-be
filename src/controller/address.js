@@ -103,9 +103,6 @@ const addressControllers = {
   getOngkir: async (req, res) => {
     try {
       const { origin, destination, weight, courier } = req.body;
-      // console.log(origin, destination, weight, courier);
-
-      // const user_id = req.user.id;
 
       const serviceResult = await AddressService.getOngkir({
         origin,

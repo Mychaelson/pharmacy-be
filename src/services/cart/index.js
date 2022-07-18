@@ -1,4 +1,6 @@
+const { Op } = require("sequelize");
 const { Cart, Produk } = require("../../lib/sequelize");
+const { checkout } = require("../../routes/transaction");
 const Service = require("../service");
 
 class CartService extends Service {
@@ -71,6 +73,51 @@ class CartService extends Service {
       return this.handleError({
         message: "Server Error!",
         statusCode: 500,
+      });
+    }
+  };
+
+  static getCartById = async (cartId, show = "checkout") => {
+    try {
+      let getCartData;
+      if (show == "checkout") {
+        getCartData = await Cart.findAndCountAll({
+          where: {
+            id: {
+              [Op.in]: cartId,
+            },
+          },
+          include: Produk,
+        });
+      } else if (show == "konfirmasi") {
+        getCartData = await Cart.findAndCountAll({
+          where: {
+            id: {
+              [Op.in]: cartId,
+            },
+          },
+          include: Produk,
+          paranoid: false,
+        });
+      }
+
+      if (!getCartData) {
+        return this.handleError({
+          message: "Cant find the selected cart",
+          statusCode: 404,
+        });
+      }
+
+      return this.handleSuccess({
+        message: "Cart Found",
+        statusCode: 200,
+        data: getCartData,
+      });
+    } catch (err) {
+      console.log(err);
+      return this.handleError({
+        statusCode: 500,
+        message: "Server Error!",
       });
     }
   };

@@ -83,6 +83,9 @@ DaftarTransaksi.belongsTo(User);
 StatusTransaksi.hasMany(DaftarTransaksi);
 DaftarTransaksi.belongsTo(StatusTransaksi);
 
+MetodePembayaran.hasMany(DaftarTransaksi);
+DaftarTransaksi.belongsTo(MetodePembayaran);
+
 DaftarTransaksi.hasMany(DetailTransaksi);
 DetailTransaksi.belongsTo(DaftarTransaksi);
 
