@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 const MutasiStok = (sequelize) => {
   return sequelize.define("stock_mutation", {
-    aktifitas: {
+    aktivitas: {
       type: DataTypes.STRING,
       allowNull: false,
     },

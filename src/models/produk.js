@@ -7,16 +7,24 @@ const Produk = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    harga: {
+    nomor_obat: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    satuan: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    nomor_bpom: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    harga_jual: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     diskon: {
       type: DataTypes.DECIMAL,
-    },
-    harga_modal: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     produk_image_url: {
       type: DataTypes.JSON,

@@ -20,15 +20,21 @@ const Alamat = (sequelize) => {
     },
     provinsi: {
       type: DataTypes.STRING,
-      allowNull: false,
+    },
+    provinsi_id: {
+      type: DataTypes.INTEGER,
+    },
+    provinsi_id: {
+      type: DataTypes.INTEGER,
     },
     kota_kabupaten: {
       type: DataTypes.STRING,
-      allowNull: false,
+    },
+    kota_kabupaten_id: {
+      type: DataTypes.INTEGER,
     },
     kecamatan: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     kode_pos: {
       type: DataTypes.STRING,

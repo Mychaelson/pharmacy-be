@@ -32,7 +32,7 @@ const MetodePembayaran = require("../models/metodePembayaran")(sequelize);
 const BuktiPembayaran = require("../models/buktiPembayaran")(sequelize);
 const StatusTransaksi = require("../models/statusTransaksi")(sequelize);
 const MutasiStok = require("../models/mutasiStok")(sequelize);
-const TipeMutasi = require("../models/tipeMutasi")(sequelize);
+const UserProduct = require("../models/userProduct")(sequelize);
 
 // defind the relationship of the model
 Admin.hasMany(AdminLoginSession, { foreignKey: "admin_id" });
@@ -40,6 +40,9 @@ AdminLoginSession.belongsTo(Admin, { foreignKey: "admin_id" });
 
 User.hasMany(UserLoginSession);
 UserLoginSession.belongsTo(User);
+
+Alamat.hasOne(DaftarTransaksi);
+DaftarTransaksi.belongsTo(Alamat);
 
 User.hasMany(AccountVerificationToken);
 AccountVerificationToken.belongsTo(User);
@@ -56,8 +59,8 @@ Cart.belongsTo(User);
 Produk.hasMany(Cart);
 Cart.belongsTo(Produk);
 
-Produk.hasMany(PurchaseOrder);
-PurchaseOrder.belongsTo(Produk);
+Stok.hasMany(PurchaseOrder);
+PurchaseOrder.belongsTo(Stok);
 
 Admin.hasMany(PurchaseOrder);
 PurchaseOrder.belongsTo(Admin);
@@ -68,20 +71,23 @@ Produk.belongsTo(KategoriProduk);
 Produk.hasMany(Stok);
 Stok.belongsTo(Produk);
 
-StokStatus.hasMany(Stok);
-Stok.belongsTo(StokStatus);
-
 Produk.hasMany(MutasiStok);
 MutasiStok.belongsTo(Produk);
 
-TipeMutasi.hasMany(MutasiStok);
-MutasiStok.belongsTo(TipeMutasi);
+StokStatus.hasMany(Stok);
+Stok.belongsTo(StokStatus);
+
+Stok.hasMany(MutasiStok);
+MutasiStok.belongsTo(Stok);
 
 User.hasMany(DaftarTransaksi);
 DaftarTransaksi.belongsTo(User);
 
-StatusTransaksi.hasOne(DaftarTransaksi);
+StatusTransaksi.hasMany(DaftarTransaksi);
 DaftarTransaksi.belongsTo(StatusTransaksi);
+
+MetodePembayaran.hasMany(DaftarTransaksi);
+DaftarTransaksi.belongsTo(MetodePembayaran);
 
 DaftarTransaksi.hasMany(DetailTransaksi);
 DetailTransaksi.belongsTo(DaftarTransaksi);
@@ -117,7 +123,7 @@ module.exports = {
   StatusTransaksi,
   Stok,
   StokStatus,
-  TipeMutasi,
   User,
   UserLoginSession,
+  UserProduct,
 };

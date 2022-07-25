@@ -551,6 +551,63 @@ class AuthService extends Service {
       });
     }
   };
+
+  static loginWithGoogle = async ({
+    uid,
+    name,
+    email,
+    username,
+    image_url,
+  }) => {
+    try {
+      const findOrCreateUser = await User.findOrCreate({
+        where: { uid },
+        defaults: {
+          nama: name,
+          username,
+          email,
+          is_verified: true,
+          photo_profile: image_url,
+        },
+      });
+
+      await UserLoginSession.update(
+        {
+          is_valid: false,
+        },
+        {
+          where: {
+            userId: findOrCreateUser[0].id,
+            is_valid: true,
+          },
+        }
+      );
+
+      const sessionToken = nanoid(64);
+
+      await UserLoginSession.create({
+        token: sessionToken,
+        userId: findOrCreateUser[0].id,
+        is_valid: true,
+        valid_until: moment().add(1, "day"),
+      });
+
+      return this.handleSuccess({
+        statusCode: 200,
+        message: "Login Success!",
+        data: {
+          user: findOrCreateUser[0],
+          token: sessionToken,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return this.handleError({
+        message: "Server Error!",
+        statusCode: 500,
+      });
+    }
+  };
 }
 
 module.exports = AuthService;

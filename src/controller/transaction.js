@@ -1,12 +1,12 @@
-const ProductService = require("../services/product");
+const TransactionService = require("../services/transaction");
 
-const productControllers = {
-  getProduct: async (req, res) => {
+const transactionControllers = {
+  getAllTransaction: async (req, res) => {
     try {
-      const serviceResult = await ProductService.getProduct(req);
-
+      const serviceResult = await TransactionService.getAllTransaction(
+        req.query
+      );
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -17,30 +17,42 @@ const productControllers = {
       });
     }
   },
-
-  getAllProduct: async (req, res) => {
-    try {
-      const serviceResult = await ProductService.getAllProduct(req.query);
-      if (!serviceResult.success) throw serviceResult;
-      return res.status(serviceResult.statusCode || 200).json({
-        message: serviceResult.message,
-        result: serviceResult.data,
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(err.statusCode || 500).json({
-        message: err.message,
-      });
-    }
-  },
-
-  recordUserProduct: async (req, res) => {
+  createTransaction: async (req, res) => {
     try {
       const user_id = req.user.id;
-      const { product_id } = req.body;
-      const serviceResult = await ProductService.recordUserProduct(
+
+      const { total_price, cartId, paymentMethodId, addressId, transactionId } =
+        req.body;
+
+      const serviceResult = await TransactionService.createTransaction(
+        total_price,
         user_id,
-        product_id
+        cartId,
+        paymentMethodId,
+        addressId,
+        transactionId
+      );
+
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode).json({
+        message: serviceResult.message,
+        data: serviceResult.data,
+      });
+    } catch (err) {
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  uploadResepDokter: async (req, res) => {
+    try {
+      const user_id = req.user.id;
+      const { addressId } = req.body;
+      const serviceResult = await TransactionService.uploadResepDokter(
+        req.file,
+        user_id,
+        addressId
       );
       if (!serviceResult.success) throw serviceResult;
       return res.status(serviceResult.statusCode || 200).json({
@@ -55,9 +67,9 @@ const productControllers = {
     }
   },
 
-  getAllProductName: async (req, res) => {
+  getAllPaymentMethod: async (req, res) => {
     try {
-      const serviceResult = await ProductService.getAllProductName();
+      const serviceResult = await TransactionService.getAllPaymentMethod();
       if (!serviceResult.success) throw serviceResult;
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
@@ -71,48 +83,69 @@ const productControllers = {
     }
   },
 
-  getProductByCategory: async (req, res) => {
+  getPaymentMethodById: async (req, res) => {
     try {
-      const serviceResult = await ProductService.getProductByCategory(
-        req.params.categoryId
+      const { id } = req.body;
+      const serviceResult = await TransactionService.getPaymentMethodById(id);
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode || 200).json({
+        message: serviceResult.message,
+        result: serviceResult.data,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  uploadProofOfPayment: async (req, res) => {
+    try {
+      const serviceResult = await TransactionService.uploadProofOfPayment(
+        req.body,
+        req.file
       );
 
       if (!serviceResult.success) throw serviceResult;
-
-      return res.status(serviceResult.statusCode || 200).json({
+      return res.status(serviceResult.statusCode || 201).json({
         message: serviceResult.message,
         result: serviceResult.data,
       });
     } catch (err) {
+      console.log(err);
       return res.status(err.statusCode || 500).json({
         message: err.message,
       });
     }
   },
 
-  getProductWithDiscount: async (req, res) => {
+  getTransactionById: async (req, res) => {
     try {
-      const serviceResult = await ProductService.getProductWithDiscount();
+      const serviceResult = await TransactionService.getTransactionById(
+        req.params.transactionId
+      );
 
       if (!serviceResult.success) throw serviceResult;
-
-      return res.status(serviceResult.statusCode || 200).json({
+      return res.status(serviceResult.statusCode || 201).json({
         message: serviceResult.message,
         result: serviceResult.data,
       });
     } catch (err) {
+      console.log(err);
       return res.status(err.statusCode || 500).json({
         message: err.message,
       });
     }
   },
 
-  getPopularProduct: async (req, res) => {
+  finishTransaction: async (req, res) => {
     try {
-      const serviceResult = await ProductService.getPopularProduct();
-
+      const { transactionId } = req.body;
+      const serviceResult = await TransactionService.finishTransaction(
+        transactionId
+      );
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -125,4 +158,4 @@ const productControllers = {
   },
 };
 
-module.exports = productControllers;
+module.exports = transactionControllers;

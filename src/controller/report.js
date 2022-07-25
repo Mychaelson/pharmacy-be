@@ -1,15 +1,11 @@
-const AuthService = require("../services/auth");
+const ReportService = require("../services/report");
 
-const authController = {
-  registerUser: async (req, res) => {
+const ReportController = {
+  getTransactionCount: async (req, res) => {
     try {
-      const { name, username, email, password } = req.body;
-
-      const serviceResult = await AuthService.registerUser(
-        username,
-        email,
-        name,
-        password
+      const { stateOfDate } = req.body;
+      const serviceResult = await ReportService.getTransactionCount(
+        stateOfDate
       );
 
       if (!serviceResult.success) throw serviceResult;
@@ -25,13 +21,11 @@ const authController = {
     }
   },
 
-  loginUser: async (req, res) => {
+  getExpProduct: async (req, res) => {
     try {
-      const { credential, password } = req.body;
-      const serviceResult = await AuthService.loginUser(credential, password);
+      const serviceResult = await ReportService.getExpDateInfo();
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -44,13 +38,11 @@ const authController = {
     }
   },
 
-  keepLoginUser: async (req, res) => {
+  getTodayTransaction: async (req, res) => {
     try {
-      const { token, user } = req;
-      const serviceResult = await AuthService.keepLoginUser(token, user);
+      const serviceResult = await ReportService.getTodayOrder();
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -63,13 +55,11 @@ const authController = {
     }
   },
 
-  loginAdmin: async (req, res) => {
+  getTodayStok: async (req, res) => {
     try {
-      const { username, password } = req.body;
-      const serviceResult = await AuthService.loginAdmin(username, password);
+      const serviceResult = await ReportService.getTodayStok();
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -82,15 +72,83 @@ const authController = {
     }
   },
 
-  registerAdmin: async (req, res) => {
+  getPenjualan: async (req, res) => {
     try {
-      const { name, username, email, password } = req.body;
+      const { stateOfDate } = req.body;
+      const serviceResult = await ReportService.getPenjualan(stateOfDate);
 
-      const serviceResult = await AuthService.registerAdmin(
-        username,
-        email,
-        name,
-        password
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode || 200).json({
+        message: serviceResult.message,
+        result: serviceResult.data,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  getTodayRevenue: async (req, res) => {
+    try {
+      const serviceResult = await ReportService.getTodayRevenue();
+
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode || 200).json({
+        message: serviceResult.message,
+        result: serviceResult.data,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  getProfit: async (req, res) => {
+    try {
+      const { stateOfDate } = req.body;
+      const serviceResult = await ReportService.getProfit(stateOfDate);
+
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode || 200).json({
+        message: serviceResult.message,
+        result: serviceResult.data,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  getPembatalan: async (req, res) => {
+    try {
+      const { stateOfDate } = req.body;
+      const serviceResult = await ReportService.getPembatalan(stateOfDate);
+
+      if (!serviceResult.success) throw serviceResult;
+      return res.status(serviceResult.statusCode || 200).json({
+        message: serviceResult.message,
+        result: serviceResult.data,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
+
+  getProductQuantitySold: async (req, res) => {
+    try {
+      const { stateOfDate, productId } = req.body;
+      const serviceResult = await ReportService.getProductQuantitySold(
+        productId,
+        stateOfDate
       );
 
       if (!serviceResult.success) throw serviceResult;
@@ -106,72 +164,15 @@ const authController = {
     }
   },
 
-  keepLoginAdmin: async (req, res) => {
+  getItemViewedCount: async (req, res) => {
     try {
-      const { adminToken, admin } = req;
-      const serviceResult = await AuthService.keepLoginAdmin(adminToken, admin);
-      if (!serviceResult.success) throw serviceResult;
-      return res.status(serviceResult.statusCode || 200).json({
-        message: serviceResult.message,
-        result: serviceResult.data,
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(err.statusCode || 500).json({
-        message: err.message,
-      });
-    }
-  },
-
-  resendVerificationEmail: async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const serviceResult = await AuthService.resendVerificationToken(userId);
-
-      if (!serviceResult.success) throw serviceResult;
-
-      return res.status(serviceResult.statusCode || 200).json({
-        message: serviceResult.message,
-        result: serviceResult.data,
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(err.statusCode || 500).json({
-        message: err.message,
-      });
-    }
-  },
-
-  verifyUser: async (req, res) => {
-    try {
-      const { token } = req.params;
-
-      const serviceResult = await AuthService.verifyUser(token);
-
-      if (!serviceResult.success) throw serviceResult;
-
-      return res.redirect(serviceResult.url);
-    } catch (err) {
-      console.log(err);
-      return res.status(err.statusCode || 500).json({
-        message: err.message,
-      });
-    }
-  },
-
-  changePassword: async (req, res) => {
-    try {
-      const { oldPassword, newPassword } = req.body;
-      const userId = req.user.id;
-
-      const serviceResult = await AuthService.changePassword(
-        userId,
-        oldPassword,
-        newPassword
+      const { stateOfDate, productId } = req.body;
+      const serviceResult = await ReportService.getItemsViewCount(
+        productId,
+        stateOfDate
       );
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -184,37 +185,15 @@ const authController = {
     }
   },
 
-  sendResetPasswordEmail: async (req, res) => {
+  getProductSoldCount: async (req, res) => {
     try {
-      const { email } = req.body;
-
-      const serviceResult = await AuthService.sendResetPasswordEmail(email);
-
-      if (!serviceResult.success) throw serviceResult;
-
-      return res.status(serviceResult.statusCode || 200).json({
-        message: serviceResult.message,
-        result: serviceResult.data,
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(err.statusCode || 500).json({
-        message: err.message,
-      });
-    }
-  },
-
-  resetPassword: async (req, res) => {
-    try {
-      const { forgotPasswordToken, newPassword } = req.body;
-
-      const serviceResult = await AuthService.resetPassword(
-        newPassword,
-        forgotPasswordToken
+      const { stateOfDate, productId } = req.body;
+      const serviceResult = await ReportService.getItemsSoldCOunt(
+        productId,
+        stateOfDate
       );
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -227,20 +206,15 @@ const authController = {
     }
   },
 
-  loginWithGoogle: async (req, res) => {
+  getRevenuePerProduct: async (req, res) => {
     try {
-      const { uid, name, email, username, image_url } = req.body;
-
-      const serviceResult = await AuthService.loginWithGoogle({
-        uid,
-        name,
-        email,
-        username,
-        image_url,
-      });
+      const { stateOfDate, productId } = req.body;
+      const serviceResult = await ReportService.getRevenuePerProduct(
+        productId,
+        stateOfDate
+      );
 
       if (!serviceResult.success) throw serviceResult;
-
       return res.status(serviceResult.statusCode || 200).json({
         message: serviceResult.message,
         result: serviceResult.data,
@@ -254,4 +228,4 @@ const authController = {
   },
 };
 
-module.exports = authController;
+module.exports = ReportController;

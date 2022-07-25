@@ -1,4 +1,4 @@
-const { User } = require("../../lib/sequelize");
+const { User, Alamat } = require("../../lib/sequelize");
 const Service = require("../service");
 
 class UserService extends Service {
@@ -139,6 +139,36 @@ class UserService extends Service {
       });
     }
   };
+
+  // static createNewAddress = async () => {
+  //   try {
+  //     const newAddress = await Alamat({
+  //       label_alat,
+  //       nama_penerima,
+  //       no_telepon_penerima,
+  //       alamat_lengkap,
+  //       is_main_address,
+  //       provinsi: province,
+  //       provinci_id: province_id,
+  //       kota_kabupaten: city_name,
+  //       kota_id: city_id,
+  //       kecamatan,
+  //       kode_pos,
+  //     });
+
+  //     return this.handleSuccess({
+  //       statusCode: 200,
+  //       message: "Successfully created new address!",
+  //       data: newAddress,
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //     return this.handleError({
+  //       statusCode: 500,
+  //       message: "Server Error!",
+  //     });
+  //   }
+  // };
 }
 
 module.exports = UserService;

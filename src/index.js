@@ -28,14 +28,26 @@ const {
   productRoutes,
   userRoutes,
   adminRoutes,
+  cartRoutes,
+  transactionRoutes,
+  addressRoutes,
+  reportRoutes,
 } = require("./routes");
 
 app.use("/avatar", express.static(`${__dirname}/public/avatar`));
 app.use("/product", express.static(`${__dirname}/public/product`));
+app.use("/resep", express.static(`${__dirname}/public/resep`));
+app.use("/payment", express.static(`${__dirname}/public/payment`));
+
 app.use("/auth", authRoutes);
 app.use("/product", productRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
+app.use("/cart", cartRoutes);
+app.use("/transaction", transactionRoutes);
+app.use("/address", addressRoutes);
+app.use("/report", reportRoutes);
+
 // app.use("/", (req, res, next) => {
 //   res.send("<h1>welcome to Pharmacy API</h1>");
 // });
