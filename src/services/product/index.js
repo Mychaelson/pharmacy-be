@@ -174,6 +174,10 @@ class ProductService extends Service {
         where: {
           productCategoryId: categoryId,
         },
+        include: {
+          model: Stok,
+        },
+        limit: 5,
       });
 
       if (!getProductData) {
@@ -260,7 +264,7 @@ class ProductService extends Service {
         ],
         order: [[Sequelize.col("productCount"), "DESC"]],
         group: ["productId"],
-        limit: 5,
+        limit: 6,
       });
 
       if (!getPopularProduct) {

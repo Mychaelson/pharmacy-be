@@ -319,7 +319,7 @@ class AdminService extends Service {
         jumlah: body.jumlah_stok,
         productId: body.productId,
         aktivitas: "Penerimaan Barang",
-        stockId: addStock.id,
+        exp_date: body.exp_date,
       });
 
       return this.handleSuccess({
@@ -423,12 +423,6 @@ class AdminService extends Service {
         limit: _limit ? parseInt(_limit) : undefined,
         offset: (_page - 1) * _limit,
         distinct: true,
-        include: [
-          {
-            model: Stok,
-            attributes: ["id", "exp_date"],
-          },
-        ],
       });
 
       if (!findProductStock) {
@@ -756,7 +750,7 @@ class AdminService extends Service {
           jumlah: val.quantity,
           productId: val.productId,
           aktivitas: "Penjualan Barang",
-          stockId: findStock.id,
+          exp_date: findStock.exp_date,
         };
       });
       await MutasiStok.bulkCreate(arrayForMutation, { individualHooks: true });

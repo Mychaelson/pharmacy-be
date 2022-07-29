@@ -10,13 +10,10 @@ const {
 const Service = require("../service");
 const { sequelize } = require("../../lib/sequelize");
 
-const TODAY_START = new Date().setUTCHours(0, 0, 0, 0);
-const NOW = new Date();
-const endOfMonth = moment().endOf("month").format("YYYY-MM-DD hh:mm");
-const nextThreeMonth = moment().add(3, "months");
-
 class ReportService extends Service {
   static getTransactionCount = async (stateOfDate = "Harian") => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       let countNewOrder;
       if (stateOfDate === "Harian") {
@@ -66,6 +63,9 @@ class ReportService extends Service {
   };
 
   static getExpDateInfo = async () => {
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
+    const endOfMonth = moment().endOf("month").format("YYYY-MM-DD HH:mm");
+    const nextThreeMonth = moment().add(3, "months");
     try {
       const expProduct = await Stok.findAll({
         where: {
@@ -124,6 +124,8 @@ class ReportService extends Service {
   };
 
   static getTodayOrder = async () => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       const todayOrder = await DaftarTransaksi.count({
         where: {
@@ -169,6 +171,7 @@ class ReportService extends Service {
   };
 
   static getTodayStok = async () => {
+    const TODAY_START = moment().startOf("day");
     try {
       const todayStok = await Stok.findAll({
         where: {
@@ -246,6 +249,8 @@ class ReportService extends Service {
   };
 
   static getTodayRevenue = async () => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       const todayRevenue = await DetailTransaksi.findAll({
         where: {
@@ -391,6 +396,8 @@ class ReportService extends Service {
     productId,
     stateOfDate = "Bulanan"
   ) => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       let qtySold, yesterdayQtySold;
 
@@ -487,6 +494,8 @@ class ReportService extends Service {
   };
 
   static getItemsViewCount = async (produk_id, stateOfDate = "Bulanan") => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       let viewed, prevViewed;
 
@@ -583,6 +592,8 @@ class ReportService extends Service {
   };
 
   static getItemsSoldCOunt = async (productId, stateOfDate = "Bulanan") => {
+    const TODAY_START = moment().startOf("day");
+    const NOW = moment().format("YYYY-MM-DD HH:mm");
     try {
       let count, prevCount;
 

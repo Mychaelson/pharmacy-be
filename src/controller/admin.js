@@ -291,6 +291,19 @@ const adminControllers = {
       });
     }
   },
+
+  getAdmin: async (req, res) => {
+    try {
+      return res.status(200).json({
+        message: "Berhasil",
+        result: "ABC",
+      });
+    } catch (err) {
+      return res.status(err.statusCode || 500).json({
+        message: err.message,
+      });
+    }
+  },
 };
 
 module.exports = adminControllers;

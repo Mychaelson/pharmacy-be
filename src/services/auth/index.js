@@ -16,6 +16,9 @@ const mustache = require("mustache");
 const bcrypt = require("bcryptjs");
 // const { generateToken } = require("../../lib/jwt");
 
+const FE_Domain = process.env.DOMAIN_FE;
+const BE_Domain = process.env.DOMAIN_BE;
+
 class AuthService extends Service {
   static registerUser = async (username, email, name, password) => {
     try {
@@ -50,7 +53,7 @@ class AuthService extends Service {
         userId: registerUser.id,
       });
 
-      const verifyUserLink = `http://localhost:2000/auth/verify/${verifyAccountToken}`;
+      const verifyUserLink = `${BE_Domain}/auth/verify/${verifyAccountToken}`;
 
       const emailTemplate = fs
         .readFileSync(__dirname + "/../../templates/verifyAccount.html")
@@ -348,7 +351,7 @@ class AuthService extends Service {
       );
 
       return this.handleRedirect({
-        url: `http://localhost:3000/verifikasi-berhasil?referral=${token}`,
+        url: `${FE_Domain}/verifikasi-berhasil?referral=${token}`,
       });
     } catch (err) {
       return this.handleError({
@@ -378,7 +381,7 @@ class AuthService extends Service {
         userId: findUser.id,
       });
 
-      const verifyUserLink = `http://localhost:2000/auth/verify/${verifyAccountToken}`;
+      const verifyUserLink = `${BE_Domain}/auth/verify/${verifyAccountToken}`;
 
       const emailTemplate = fs
         .readFileSync(__dirname + "/../../templates/verifyAccount.html")
@@ -479,7 +482,7 @@ class AuthService extends Service {
         userId: findUser.id,
       });
 
-      const forgotPasswordLink = `http://localhost:3000/forgot-password/?fp_token=${resetPasswordToken}`;
+      const forgotPasswordLink = `${FE_Domain}/forgot-password/?fp_token=${resetPasswordToken}`;
 
       const emailTemplate = fs
         .readFileSync(__dirname + "/../../templates/resetPassword.html")

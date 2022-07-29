@@ -10,6 +10,10 @@ const MutasiStok = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    exp_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
   });
 };
 

@@ -48,9 +48,9 @@ app.use("/transaction", transactionRoutes);
 app.use("/address", addressRoutes);
 app.use("/report", reportRoutes);
 
-// app.use("/", (req, res, next) => {
-//   res.send("<h1>welcome to Pharmacy API</h1>");
-// });
+app.use("/", (req, res, next) => {
+  res.send("<h1>welcome to Pharmacy API</h1>");
+});
 
 app.listen(PORT, () => {
   console.log("Listening in Port: ", PORT);

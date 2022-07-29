@@ -65,18 +65,37 @@ class AddressService extends Service {
         );
       }
 
-      const newAddress = await Alamat.create({
-        label_alamat,
-        nama_penerima,
-        no_telepon_penerima,
-        alamat_lengkap,
-        kode_pos,
-        provinsi_id,
-        kota_kabupaten_id,
-        kecamatan,
-        userId,
-        is_main_address,
+      const findMainAdress = await Alamat.findOne({
+        where: { userId, is_main_address: true },
       });
+
+      if (!findMainAdress) {
+        newAddress = await Alamat.create({
+          label_alamat,
+          nama_penerima,
+          no_telepon_penerima,
+          alamat_lengkap,
+          kode_pos,
+          provinsi_id,
+          kota_kabupaten_id,
+          kecamatan,
+          userId,
+          is_main_address: true,
+        });
+      } else {
+        const newAddress = await Alamat.create({
+          label_alamat,
+          nama_penerima,
+          no_telepon_penerima,
+          alamat_lengkap,
+          kode_pos,
+          provinsi_id,
+          kota_kabupaten_id,
+          kecamatan,
+          userId,
+          is_main_address,
+        });
+      }
 
       return this.handleSuccess({
         statusCode: 200,

@@ -4,6 +4,8 @@ const { authorizedLoginAdmin } = require("../middleware/authorizeLoginAdmin");
 
 const router = require("express").Router();
 
+router.get("/", adminControllers.getAdmin);
+
 // Input New Product
 router.post(
   "/product",
